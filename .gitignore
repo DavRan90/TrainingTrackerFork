@@ -121,6 +121,9 @@ ipch/
 # Visual Studio Trace Files
 *.e2e
 
+# Rider Trace Files
+* .idea/
+
 # TFS 2012 Local Workspace
 $tf/
 
@@ -334,6 +337,9 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Rider Trace Files
+.idea/
 
 # OpenCover UI analysis results
 OpenCover/
