@@ -1,6 +1,4 @@
-﻿TrainingTracker : Project Setup Guide
-
-Welcome to the TrainingTracker project!
+Welcome to the TrainingTracker project!😊
 This guide explains everything each team member needs to do to get the project running locally, including database setup, 
 development settings, and Identity.
 
