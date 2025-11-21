@@ -19,6 +19,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// NYTT
+builder.Services.AddHttpClient("Backend", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7101");
+});
+
 
 builder.Services.AddRazorPages();
 

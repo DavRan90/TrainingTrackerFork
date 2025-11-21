@@ -5,7 +5,29 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form method="post">
+        
+        <label asp-for="Activity.Name"></label>
+        <input asp-for="Activity.Name" />
+        <br />
+        <label asp-for="Activity.Distance"></label>
+        <input asp-for="Activity.Distance" />
+        <br />
+        <input type="submit" value="Lägg till aktivitet" />
+    </form>
+    @* <div>
+        <div>
+            <label>Aktivitetsnamn: </label>
+            <input type="text" />
+        </div>
+        <div>
+            <label>Distans: </label>
+            <input type="number" />
+        </div>
+        <div>
+            <button type="submit">Spara aktivitet</button>
+        </div>
+        
+    </div> *@
     
 </div>
