@@ -11,5 +11,15 @@ namespace TrainingTrackerAPI.Data
         }
 
         public DbSet<Activity> Activities { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure Table-Per-Hierarchy (TPH) inheritance
+            modelBuilder.Entity<Activity>()
+                .HasDiscriminator<string>("ActivityType")
+                .HasValue<Running>("Running");
+        }
     }
 }

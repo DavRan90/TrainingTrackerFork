@@ -13,13 +13,21 @@ namespace TrainingTrackerAPI.Controllers
         {
             _context = context;
         }
-
         [HttpPost]
-        public IActionResult CreateActivity(Activity activity)
+        public async Task<IActionResult> CreateRunning([FromBody] DTO.ActivitesCreateDto newActivity)
         {
-            _context.Activities.Add(activity);
-            _context.SaveChanges();
-            return Ok();
+            var running = new Running
+            {
+                Name = newActivity.Name,
+                Distance = newActivity.Distance,
+                ActivityDate = DateTime.UtcNow,
+                TotalTimeInSeconds = 0,
+                AverageCadence = 0
+            };
+            _context.Activities.Add(running);
+            await _context.SaveChangesAsync();
+
+            return Ok(running);
         }
     }
 }
