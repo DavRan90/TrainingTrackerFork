@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11218.70 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingTracker", "TrainingTracker\TrainingTracker.csproj", "{EC4ACFAA-18FF-44D0-9BEE-777F5605D3D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingTrackerAPI", "TrainingTrackerAPI\TrainingTrackerAPI.csproj", "{20F96220-FF28-421A-8746-0EE851EC40F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingTracker.Tests", "TrainingTracker.Tests\TrainingTracker.Tests.csproj", "{7C8636AD-DA4A-4636-83D0-15902C092413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{20F96220-FF28-421A-8746-0EE851EC40F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20F96220-FF28-421A-8746-0EE851EC40F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20F96220-FF28-421A-8746-0EE851EC40F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C8636AD-DA4A-4636-83D0-15902C092413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C8636AD-DA4A-4636-83D0-15902C092413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C8636AD-DA4A-4636-83D0-15902C092413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C8636AD-DA4A-4636-83D0-15902C092413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
