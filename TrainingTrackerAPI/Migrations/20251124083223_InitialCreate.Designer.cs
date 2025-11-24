@@ -12,8 +12,8 @@ using TrainingTrackerAPI.Data;
 namespace TrainingTrackerAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251121150637_UpdateModel")]
-    partial class UpdateModel
+    [Migration("20251124083223_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
