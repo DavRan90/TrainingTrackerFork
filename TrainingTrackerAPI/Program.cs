@@ -72,6 +72,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();
+public partial class Program { }
 
 //record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 //{

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,24 +27,24 @@ namespace TrainingTracker.Tests
                 //Test database connection
                 var dbConnectionDescriptor = services.SingleOrDefault(
                     d => d.ServiceType ==
-                        typeof(SqlConnection));
+                        typeof(SqliteConnection));
 
                 if (dbConnectionDescriptor != null)
                 {
                     services.Remove(dbConnectionDescriptor);
                 }
 
-                services.AddSingleton<SqlConnection>(container =>
+                services.AddSingleton<SqliteConnection>(container =>
                 {
-                    var connection = new SqlConnection("DataSource=:memory:");
+                    var connection = new SqliteConnection("DataSource=:memory:");
                     connection.Open();
                     return connection;
                 });
 
                 services.AddDbContext<TrainingTrackerAPI.Data.ApplicationDbContext>((container, options) =>
                 {
-                    var connection = container.GetRequiredService<SqlConnection>();
-                    options.UseSqlServer(connection);
+                    var connection = container.GetRequiredService<SqliteConnection>();
+                    options.UseSqlite(connection);
 
                 });
 
