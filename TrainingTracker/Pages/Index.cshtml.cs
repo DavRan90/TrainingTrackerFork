@@ -25,11 +25,20 @@ namespace TrainingTracker.Pages
 
         public List<ActivityDto> Activities { get; set; }
 
-        public async Task OnGetAsync(int deleteId)
+        public async Task OnGetAsync(int deleteId, int editId)
         {
-            if(deleteId != 0)
+            if (deleteId != 0)
             {
                 await DAL.ActivityAPIManager.DeleteActivity(deleteId);
+            }
+
+            if (editId != 0)
+            {
+                Activity = new();
+                var activity = await DAL.ActivityAPIManager.GetActivity(editId);
+                Activity.Name = activity.Name;
+                Activity.Distance = activity.Distance;
+                Activity.Type = activity.Type;
             }
             Activities = await DAL.ActivityAPIManager.GetAllActivities();
 
@@ -39,13 +48,14 @@ namespace TrainingTracker.Pages
                 new SelectListItem { Value = "Walking", Text = "Walking" },
                 new SelectListItem { Value = "Cycling", Text = "Cycling" }
 
-            }; 
+            };
 
         }
         public async Task<IActionResult> OnPostAsync()
         {
-           
             await DAL.ActivityAPIManager.SaveActivity(Activity);
+
+
 
             return RedirectToPage("./Index");
 

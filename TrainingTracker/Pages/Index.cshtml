@@ -4,26 +4,29 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
+<div class="">
     <form method="post">
         <label asp-for="Activity.Type"></label>
+        <br />
         <select asp-for="Activity.Type" asp-items="Model.ActivityTypes">
         <option value="">-- Välj aktivitetstyp --</option>
         </select>
         <br />
         <label asp-for="Activity.Name"></label>
+        <br />
         <input asp-for="Activity.Name" />
         <br />
         <label asp-for="Activity.Distance"></label>
+        <br />
         <input asp-for="Activity.Distance" />
+        <br />
         <br />
         <input type="submit" value="Lägg till aktivitet" />
     </form>
-
 </div>
-
+<br />
 <table class="table table-striped">
-
+    <thead>Activities</thead>
     <tr>
 
         <td>ID</td>
@@ -36,7 +39,6 @@
     @foreach (var activity in Model.Activities)
 
     {
-
         <tr>
             <td>@activity.Id</td>
             <td>@activity.Type</td>

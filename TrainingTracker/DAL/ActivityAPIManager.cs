@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
 
 namespace TrainingTracker.DAL
@@ -56,6 +57,43 @@ namespace TrainingTracker.DAL
             return activities;
 
         }
+        public static async Task<ActivityDto> GetActivity(int id)
+        {
+            ActivityDto activity = new();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                HttpResponseMessage response = await client.GetAsync($"api/activities/GetActivityById/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    activity = JsonSerializer.Deserialize<ActivityDto>(
+                        responseString,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        }
+                    );
+                }
+            }
+
+
+            return activity;
+        }
+
+        public static async Task UpdateActivity(ActivitesCreateDto activity, int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                var json = JsonSerializer.Serialize(activity);
+
+                StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PutAsync($"api/activities/EditActivityById/{id}", httpContent);
+
+            }
+        }
+
         public static async Task DeleteActivity(int id)
         {
             using (var client = new HttpClient())
