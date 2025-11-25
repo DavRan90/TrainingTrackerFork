@@ -19,7 +19,7 @@ namespace TrainingTrackerAPI.Controllers
         public async Task<IActionResult> CreateRunning([FromBody] DTO.ActivitesCreateDto newActivity)
         {
 
-            Activity activity = new Running();
+            Activity activity = new Activity();
 
             if (newActivity.Type == "Running")
             {
@@ -31,7 +31,6 @@ namespace TrainingTrackerAPI.Controllers
                     TotalTimeInSeconds = 0,
                     AverageCadence = 0
                 };
-                //_context.Activities.Add(activity);
             }
             if (newActivity.Type == "Walking")
             {
@@ -40,11 +39,22 @@ namespace TrainingTrackerAPI.Controllers
                     Name = newActivity.Name,
                     Distance = newActivity.Distance,
                     ActivityDate = DateTime.UtcNow,
-                    TotalTimeInSeconds = 0
+                    TotalTimeInSeconds = 0,
+                    AverageCadence = 80
                 };
-                //_context.Activities.Add(activity);
-
             }
+            if(newActivity.Type == "Cycling")
+            {
+                activity = new Cycling
+                {
+                    Name = newActivity.Name,
+                    Distance = newActivity.Distance,
+                    ActivityDate = DateTime.UtcNow,
+                    TotalTimeInSeconds = 0,
+                    AvarageWatts = 100
+                };
+            }
+
             _context.Activities.Add(activity);
             await _context.SaveChangesAsync();
 

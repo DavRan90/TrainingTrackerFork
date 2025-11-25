@@ -22,7 +22,8 @@ namespace TrainingTrackerAPI.Data
             modelBuilder.Entity<Activity>()
                 .HasDiscriminator<string>("ActivityType")
                 .HasValue<Running>("Running")
-                .HasValue<Walking>("Walking");
+                .HasValue<Walking>("Walking")
+                .HasValue<Cycling>("Cycling");
 
         }
     }

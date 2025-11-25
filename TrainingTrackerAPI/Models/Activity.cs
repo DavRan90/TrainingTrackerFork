@@ -2,7 +2,7 @@
 
 namespace TrainingTrackerAPI.Models
 {
-    public abstract class Activity
+    public class Activity
     {
         public int Id { get; set; }
         [Required]
