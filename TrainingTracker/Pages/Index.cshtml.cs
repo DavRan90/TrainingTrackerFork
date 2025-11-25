@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using TrainingTracker.DAL;
 using TrainingTrackerAPI.Models;
 
 namespace TrainingTracker.Pages
@@ -10,12 +11,14 @@ namespace TrainingTracker.Pages
     public class IndexModel : PageModel
     {
         private readonly HttpClient _http;
+        private readonly ActivityAPIManager _api;
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger, IHttpClientFactory factory)
+        public IndexModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api)
         {
             _logger = logger;
             _http = factory.CreateClient("Backend");
+            _api = api;
         }
 
         public List<SelectListItem> ActivityTypes { get; set; }
@@ -29,18 +32,18 @@ namespace TrainingTracker.Pages
         {
             if (deleteId != 0)
             {
-                await DAL.ActivityAPIManager.DeleteActivity(deleteId);
+                await _api.DeleteActivity(deleteId);
             }
 
             if (editId != 0)
             {
                 Activity = new();
-                var activity = await DAL.ActivityAPIManager.GetActivity(editId);
+                var activity = await _api.GetActivity(editId);
                 Activity.Name = activity.Name;
                 Activity.Distance = activity.Distance;
                 Activity.Type = activity.Type;
             }
-            Activities = await DAL.ActivityAPIManager.GetAllActivities();
+            Activities = await _api.GetAllActivities();
 
             ActivityTypes = new List<SelectListItem>
             {

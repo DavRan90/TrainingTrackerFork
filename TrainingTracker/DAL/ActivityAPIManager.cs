@@ -6,7 +6,13 @@ namespace TrainingTracker.DAL
 {
     public class ActivityAPIManager
     {
+        private readonly HttpClient _http;
+
         private static Uri BaseAddress = new Uri("https://localhost:7101");
+        public ActivityAPIManager(IHttpClientFactory factory)
+        {
+            _http = factory.CreateClient("Backend");
+        }
 
         public static async Task SaveActivity(TrainingTrackerAPI.DTO.ActivitesCreateDto activity)
         {
@@ -21,64 +27,71 @@ namespace TrainingTracker.DAL
             }
         }
 
-        public static async Task<List<ActivityDto>> GetAllActivities()
+        public async Task<List<ActivityDto>> GetAllActivities()
 
         {
-
-            List<ActivityDto> activities = new();
-
-            using (var client = new HttpClient())
-
-            {
-
-                client.BaseAddress = BaseAddress;
-
-                HttpResponseMessage response = await client.GetAsync("/api/Activities/GetAllActivities");
-
-                if (response.IsSuccessStatusCode)
-
-                {
-
-                    string responseString = await response.Content.ReadAsStringAsync();
-
-                    //activities = JsonSerializer.Deserialize<List<ActivityDto>>(responseString);
-                    activities = JsonSerializer.Deserialize<List<ActivityDto>>(
-                        responseString,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        }
-                    );
-
-                }
-
-            }
-
+            var activities = await _http.GetFromJsonAsync<List<ActivityDto>>("/api/Activities/GetAllActivities");
             return activities;
 
+            //List<ActivityDto> activities = new();
+
+            //using (var client = new HttpClient())
+
+            //{
+
+            //    client.BaseAddress = BaseAddress;
+
+            //    HttpResponseMessage response = await client.GetAsync("/api/Activities/GetAllActivities");
+            //    var test = await client.GetFromJsonAsync<List<ActivityDto>>("/api/Activities/GetAllActivities");
+            //    return test;
+            //}
+            //    if (response.IsSuccessStatusCode)
+
+            //    {
+
+            //        string responseString = await response.Content.ReadAsStringAsync();
+
+            //        //activities = JsonSerializer.Deserialize<List<ActivityDto>>(responseString);
+            //        activities = JsonSerializer.Deserialize<List<ActivityDto>>(
+            //            responseString,
+            //            new JsonSerializerOptions
+            //            {
+            //                PropertyNameCaseInsensitive = true
+            //            }
+            //        );
+
+            //    }
+
+            //}
+
+            //return activities;
+
         }
-        public static async Task<ActivityDto> GetActivity(int id)
-        {
-            ActivityDto activity = new();
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                HttpResponseMessage response = await client.GetAsync($"api/activities/GetActivityById/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseString = await response.Content.ReadAsStringAsync();
-                    activity = JsonSerializer.Deserialize<ActivityDto>(
-                        responseString,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        }
-                    );
-                }
-            }
-
-
+        public async Task<ActivityDto> GetActivity(int id)
+        { 
+            var activity = await _http.GetFromJsonAsync<ActivityDto>($"/api/Activities/GetActivityById/{id}");
             return activity;
+
+            //ActivityDto activity = new();
+            //using (var client = new HttpClient())
+            //{
+            //    client.BaseAddress = BaseAddress;
+            //    HttpResponseMessage response = await client.GetAsync($"api/activities/GetActivityById/{id}");
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        string responseString = await response.Content.ReadAsStringAsync();
+            //        activity = JsonSerializer.Deserialize<ActivityDto>(
+            //            responseString,
+            //            new JsonSerializerOptions
+            //            {
+            //                PropertyNameCaseInsensitive = true
+            //            }
+            //        );
+            //    }
+            //}
+
+
+            //return activity;
         }
 
         public static async Task UpdateActivity(ActivitesCreateDto activity, int id)
@@ -94,15 +107,17 @@ namespace TrainingTracker.DAL
             }
         }
 
-        public static async Task DeleteActivity(int id)
+        public  async Task DeleteActivity(int id)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
+            var response = await _http.DeleteAsync($"api/activities/DeleteActivityById/{id}");
+            response.EnsureSuccessStatusCode();
+            //using (var client = new HttpClient())
+            //{
+            //    client.BaseAddress = BaseAddress;
 
-                HttpResponseMessage response = await client.DeleteAsync($"api/activities/DeleteActivityById/{id}");
+            //    HttpResponseMessage response = await client.DeleteAsync($"api/activities/DeleteActivityById/{id}");
 
-            }
+            //}
         }
     }
 }

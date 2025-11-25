@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TrainingTracker.DAL;
 using TrainingTrackerAPI.Data;
 
 
@@ -32,6 +33,7 @@ builder.Services.AddHttpClient("Backend", client =>
     client.BaseAddress = new Uri("https://localhost:7101");
 });
 
+builder.Services.AddScoped<ActivityAPIManager>();
 
 builder.Services.AddRazorPages();
 
