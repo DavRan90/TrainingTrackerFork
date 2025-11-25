@@ -18,50 +18,52 @@ namespace TrainingTrackerAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRunning([FromBody] DTO.ActivitesCreateDto newActivity)
         {
+            Activity activity;
 
-            Activity activity = new Activity();
+            switch (newActivity.Type)
+            {
+                case "Running":
+                    activity = new Running
+                    {
+                        Name = newActivity.Name,
+                        Distance = newActivity.Distance,
+                        ActivityDate = DateTime.UtcNow,
+                        TotalTimeInSeconds = 0,
+                        AverageCadence = 0
+                    };
+                    break;
 
-            if (newActivity.Type == "Running")
-            {
-                activity = new Running
-                {
-                    Name = newActivity.Name,
-                    Distance = newActivity.Distance,
-                    ActivityDate = DateTime.UtcNow,
-                    TotalTimeInSeconds = 0,
-                    AverageCadence = 0
-                };
-            }
-            if (newActivity.Type == "Walking")
-            {
-                activity = new Walking
-                {
-                    Name = newActivity.Name,
-                    Distance = newActivity.Distance,
-                    ActivityDate = DateTime.UtcNow,
-                    TotalTimeInSeconds = 0,
-                    AverageCadence = 80
-                };
-            }
-            if(newActivity.Type == "Cycling")
-            {
-                activity = new Cycling
-                {
-                    Name = newActivity.Name,
-                    Distance = newActivity.Distance,
-                    ActivityDate = DateTime.UtcNow,
-                    TotalTimeInSeconds = 0,
-                    AvarageWatts = 100
-                };
+                case "Walking":
+                    activity = new Walking
+                    {
+                        Name = newActivity.Name,
+                        Distance = newActivity.Distance,
+                        ActivityDate = DateTime.UtcNow,
+                        TotalTimeInSeconds = 0
+                    };
+                    break;
+
+                case "Cycling":
+                    activity = new Cycling
+                    {
+                        Name = newActivity.Name,
+                        Distance = newActivity.Distance,
+                        ActivityDate = DateTime.UtcNow,
+                        TotalTimeInSeconds = 0
+                        // Lägg till andra properties om du har dem, t.ex. AverageSpeed
+                    };
+                    break;
+
+                default:
+                    return BadRequest("Unsupported activity type");
             }
 
             _context.Activities.Add(activity);
             await _context.SaveChangesAsync();
 
             return Ok(activity);
-
-            return BadRequest("Unsupported activity type");
         }
+
 
 
         [HttpPut("{id}")]
