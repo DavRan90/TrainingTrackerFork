@@ -40,8 +40,7 @@ namespace TrainingTrackerAPI.Controllers
                     Name = newActivity.Name,
                     Distance = newActivity.Distance,
                     ActivityDate = DateTime.UtcNow,
-                    TotalTimeInSeconds = 0,
-                    AverageCadence = 0
+                    TotalTimeInSeconds = 0
                 };
                 //_context.Activities.Add(activity);
 
@@ -53,6 +52,7 @@ namespace TrainingTrackerAPI.Controllers
 
             return BadRequest("Unsupported activity type");
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivityById(int id, ActivitiesEditDto editDto)
@@ -97,3 +97,6 @@ namespace TrainingTrackerAPI.Controllers
         }
     }
 }
+
+
+

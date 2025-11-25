@@ -21,7 +21,9 @@ namespace TrainingTrackerAPI.Data
             // Configure Table-Per-Hierarchy (TPH) inheritance
             modelBuilder.Entity<Activity>()
                 .HasDiscriminator<string>("ActivityType")
-                .HasValue<Running>("Running");
+                .HasValue<Running>("Running")
+                .HasValue<Walking>("Walking");
+
         }
     }
 }
