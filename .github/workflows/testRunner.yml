@@ -27,5 +27,7 @@ jobs:
       - name: Build Solution
         run: dotnet build
 
-      - name: Build Test
-        run: dotnet test
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
+        env:
+          USE_SQLITE: "true"
