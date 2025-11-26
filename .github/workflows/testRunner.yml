@@ -21,3 +21,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: Build Solution
+        run: dotnet build
+
+      - name: Build Test
+        run: dotnet test
