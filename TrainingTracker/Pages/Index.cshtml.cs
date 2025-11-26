@@ -56,14 +56,30 @@ namespace TrainingTracker.Pages
         public async Task<IActionResult> OnPostAsync()
         {
 
-
-            if (Activity.Id == null && ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await DAL.ActivityAPIManager.SaveActivity(Activity);
+                // Re-populate Activities and ActivityTypes before returning
+                Activities = await _api.GetAllActivities();
+                ActivityTypes = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Running", Text = "Running" },
+                new SelectListItem { Value = "Walking", Text = "Walking" },
+                new SelectListItem { Value = "Cycling", Text = "Cycling" }
+
+            };
+
+                return Page();
+            }
+
+            if (Activity.Id == null)
+            {
+                //Returns the created actívity
+                var response = await _api.SaveActivity(Activity);
             }
             else
             {
-                await ActivityAPIManager.UpdateActivity(Activity, (int)Activity.Id);
+                //Returns true/false if it can update
+                var response = await _api.UpdateActivity(Activity, (int)Activity.Id);
             }
 
 

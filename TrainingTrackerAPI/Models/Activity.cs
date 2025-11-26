@@ -5,8 +5,8 @@ namespace TrainingTrackerAPI.Models
     public class Activity
     {
         public int Id { get; set; }
-        [Required]
-        [StringLength(30, ErrorMessage = "namnet är för långt")]
+        [Required(ErrorMessage = "´Name is required")]
+        [StringLength(8, ErrorMessage = "Namnet är för långt")]
         public string Name { get; set; }
         public DateTime ActivityDate { get; set; }
         public int? AverageHeartRate { get; set; }
