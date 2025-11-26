@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Net;
 using System.Net.Http.Json;
 using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
@@ -50,34 +52,61 @@ namespace TrainingTracker.Tests
             response.EnsureSuccessStatusCode();
             Assert.Equal(created.Name, activity.Name);
 
-            
+
         }
 
         [Theory]
         [InlineData("Running")]
-        [InlineData("Swim")]
-        public async Task CreateRunningActivity_ShouldReturnRunning(string typeOfActivity)
+        [InlineData("Cycling")]
+        [InlineData("Walking")]
+        public async Task CreateValidActivity_ShouldReturnOkAndActivity(string typeOfActivity)
         {
             //Arrange
-            var activity = new Activity();
             var requestUri = "/api/activities";
-
-            if(typeOfActivity == "Running")
+            ActivitesCreateDto activity = new()
             {
-                activity = new Running
-                {
-                    Name = "Run",
-                    Distance = 5,
-                    ActivityDate = DateTime.Now,
-                };
-            }
+                Name = "Run",
+                Distance = 5,
+                ActivityDate = DateTime.Now,
+                Type = typeOfActivity
+            };
+
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var createdActivity = response.Content.ReadFromJsonAsync<Activity>();
+            var createdActivity = response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
 
             //Assert
             response.EnsureSuccessStatusCode();
+            Assert.True(createdActivity != null);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("Swimming")]
+        [InlineData("Skiing")]
+        [InlineData("Other acitivity")]
+        public async Task CreateInvalidActivity_ShouldReturnBadRequest(string typeOfActivity)
+        {
+            //Arrange
+            var requestUri = "/api/activities";
+            ActivitesCreateDto activity = new()
+            {
+                Name = "Name",
+                Distance = 5,
+                ActivityDate = DateTime.Now,
+                Type = typeOfActivity
+            };
+
+
+            //Act
+            var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
+            var createdActivity = response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+
+            //Assert
+            //Assert.True(createdActivity.Id == null);
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }
