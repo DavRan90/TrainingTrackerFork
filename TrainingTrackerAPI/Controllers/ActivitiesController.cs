@@ -18,7 +18,8 @@ namespace TrainingTrackerAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRunning([FromBody] DTO.ActivitesCreateDto newActivity)
         {
-            Activity activity;
+            Activity activity = new();
+            //activity.UserId = newActivity.UserId;
 
             switch (newActivity.Type)
             {
@@ -29,7 +30,8 @@ namespace TrainingTrackerAPI.Controllers
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = 0,
-                        AverageCadence = 0
+                        AverageCadence = 0,
+                        UserId = newActivity.UserId
                     };
                     break;
 
@@ -39,7 +41,8 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = 0
+                        TotalTimeInSeconds = 0,
+                        UserId = newActivity.UserId
                     };
                     break;
 
@@ -49,7 +52,8 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = 0
+                        TotalTimeInSeconds = 0,
+                        UserId = newActivity.UserId
                         // Lägg till andra properties om du har dem, t.ex. AverageSpeed
                     };
                     break;

@@ -2,6 +2,8 @@
 using System.Text.Json;
 using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
+using TrainingTracker.ViewModel;
+
 
 namespace TrainingTracker.DAL
 {
@@ -13,50 +15,50 @@ namespace TrainingTracker.DAL
             _http = factory.CreateClient("Backend");
         }
 
-        public async Task<ActivityDto> SaveActivity(ActivitesCreateDto activity)
+        public async Task<ActivityViewModel> SaveActivity(ActivityViewModel activity)
         {
             var response = await _http.PostAsJsonAsync("/api/Activities", activity);
             if(response.IsSuccessStatusCode)
             {
-                var createdActivity = response.Content.ReadFromJsonAsync<ActivityDto>().Result;
-                return createdActivity ?? new ActivityDto();
+                var createdActivity = response.Content.ReadFromJsonAsync<ActivityViewModel>().Result;
+                return createdActivity ?? new ActivityViewModel();
             }
             else
             {
-                return new ActivityDto();
+                return new ActivityViewModel();
             }
         }
 
-        public async Task<List<ActivityDto>> GetAllActivities()
+        public async Task<List<ActivityViewModel>> GetAllActivities()
         {
             try
             {
-                var activities = await _http.GetFromJsonAsync<List<ActivityDto>>("/api/Activities");
-                return activities ?? new List<ActivityDto>();
+                var activities = await _http.GetFromJsonAsync<List<ActivityViewModel>>("/api/Activities");
+                return activities ?? new List<ActivityViewModel>();
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new List<ActivityDto>();
+                return new List<ActivityViewModel>();
             }
 
         }
-        public async Task<ActivityDto> GetActivity(int id)
+        public async Task<ActivityViewModel> GetActivity(int id)
         {
             try
             {
-                var activity = await _http.GetFromJsonAsync<ActivityDto>($"/api/Activities/{id}");
-                return activity ?? new ActivityDto();
+                var activity = await _http.GetFromJsonAsync<ActivityViewModel>($"/api/Activities/{id}");
+                return activity ?? new ActivityViewModel();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new ActivityDto();
+                return new ActivityViewModel();
             }
             
         }
 
-        public async Task<bool> UpdateActivity(ActivitesCreateDto activity, int id)
+        public async Task<bool> UpdateActivity(ActivityViewModel activity, int id)
         {
             var response = await _http.PutAsJsonAsync($"/api/Activities/{id}", activity);
             return response.IsSuccessStatusCode;
