@@ -16,6 +16,6 @@ namespace TrainingTracker.ViewModel
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; }
 
-        //public ApplicationUser User { get; set; }
+        public string? UserId { get; set; }
     }
 }
