@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TrainingTrackerAPI.Models
 {
@@ -13,9 +12,7 @@ namespace TrainingTrackerAPI.Models
         public double Distance { get; set; }
         public int TotalTimeInSeconds { get; set; }
         public int? CaloriesBurned { get; set; }
-        public string? UserId { get; set; }
-        public IdentityUser? User { get; set; }
-        
+        public ApplicationUser? User { get; set; }
     }
 
 }
