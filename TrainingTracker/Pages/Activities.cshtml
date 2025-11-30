@@ -53,14 +53,18 @@
 
             
         </form>
-        <form method="get">
-            <input type="checkbox" asp-for="ShowCycling" onchange="this.form.submit()" />
-            <label asp-for="ShowCycling" class="text-black">Show Cycling</label>
+
+        <form method="post" asp-page-handler="Filter">
+            <input type="checkbox" asp-for="ShowCycling" onchange="this.form.submit()"/>
+            <label asp-for="ShowCycling" class="text-black">Cycling</label>
+
             <input type="checkbox" asp-for="ShowRunning" onchange="this.form.submit()" />
-            <label asp-for="ShowRunning" class="text-black">Show Running</label>
+            <label asp-for="ShowRunning" class="text-black">Running</label>
+
             <input type="checkbox" asp-for="ShowWalking" onchange="this.form.submit()" />
-            <label asp-for="ShowWalking" class="text-black">Show Walking</label>
+            <label asp-for="ShowWalking" class="text-black">Walking</label>
         </form>
+
 
 
 

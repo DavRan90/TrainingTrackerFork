@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,12 +21,12 @@
 @* Jag tog bort headern och la in en sidomeny istället  *@
 
 <body>
-    
+
     <div class="layout">
 
         @* Menyn på vänstra sidan *@
         <div class="layout-sidebar">
-            
+
             <div class="sidebar-logo">
                 <img src="~/images/tti.png" alt="TrainingTracker Logo" class="sidebar-logo-image" />
             </div>
@@ -50,11 +52,20 @@
                 <span>Settings</span>
             </a>
 
-          
-            <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout">
-                <i class="bi bi-box-arrow-in-right"></i>
-                <span>Logout</span>
-            </a>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            }
+            else
+            {
+                <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Login">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Login</span>
+                </a>
+            }
 
         </div>
 
