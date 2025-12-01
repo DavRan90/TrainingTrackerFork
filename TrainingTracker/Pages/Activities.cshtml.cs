@@ -37,6 +37,12 @@ namespace TrainingTracker.Pages
         [BindProperty]
         public bool ShowWalking { get; set; } = true;
 
+        [BindProperty(SupportsGet = true)]
+        public string SortColumn { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public bool SortDescending { get; set; } = false;
+
         public async Task OnGetAsync(int deleteId, int editId)
         {
             var userId = _userManager.GetUserId(User);
@@ -60,6 +66,15 @@ namespace TrainingTracker.Pages
             }
             await LoadFiltersAsync();
             LoadActivityTypes();
+
+            Activities = SortColumn switch
+            {
+                "Type" => SortDescending ? Activities.OrderByDescending(a => a.Type).ToList() : Activities.OrderBy(a => a.Type).ToList(),
+                "Title" => SortDescending ? Activities.OrderByDescending(a => a.Name).ToList() : Activities.OrderBy(a => a.Name).ToList(),
+                "Distance" => SortDescending ? Activities.OrderByDescending(a => a.Distance).ToList() : Activities.OrderBy(a => a.Distance).ToList(),
+                "Date" => SortDescending ? Activities.OrderByDescending(a => a.ActivityDate).ToList() : Activities.OrderBy(a => a.ActivityDate).ToList(),
+                _ => Activities
+            };
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {

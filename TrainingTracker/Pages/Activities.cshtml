@@ -76,15 +76,23 @@
                 <thead>
                     <tr>
                         @* <th>ID</th> *@
-                        <th>Type</th>
-                        <th>Title</th>
-                        <th>Distance</th>
-                        <th>Date</th>
+                        <th>
+                            <a asp-page="./activities" asp-route-sortcolumn="Type" asp-route-SortDescending="@(Model.SortColumn == "Type" ? !Model.SortDescending : false)">Type</a>
+                        </th>
+                        <th>
+                            <a asp-page="./activities" asp-route-sortcolumn="Title" asp-route-SortDescending="@(Model.SortColumn == "Title" ? !Model.SortDescending : false)">Title</a>
+                        </th>
+                        <th>          
+                            <a asp-page="./activities" asp-route-sortcolumn="Distance" asp-route-SortDescending="@(Model.SortColumn == "Distance" ? !Model.SortDescending : false)">Distance</a>
+                        </th>
+                        <th>
+                            <a asp-page="./activities" asp-route-sortcolumn="Date" asp-route-SortDescending="@(Model.SortColumn == "Date" ? !Model.SortDescending : false)">Date</a>
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var activity in Model.Activities.OrderByDescending(a => a.ActivityDate))
+                    @foreach (var activity in Model.Activities)
                     {
                         <tr>
                             @* <td class="text-muted">@activity.Id</td> *@
