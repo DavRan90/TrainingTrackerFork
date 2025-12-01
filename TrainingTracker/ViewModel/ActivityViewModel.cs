@@ -14,7 +14,7 @@ namespace TrainingTracker.ViewModel
         [Required(ErrorMessage = "Type of activity needs to be selected")]
         public string Type { get; set; }
         [Required(ErrorMessage = "Date is required")]
-        public DateTime ActivityDate { get; set; }
+        public DateTime ActivityDate { get; set; } = DateTime.Today;
 
         public string? UserId { get; set; }
     }
