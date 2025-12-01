@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using TrainingTracker.ViewModel;
 using TrainingTracker.DAL;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Globalization;
 
 namespace TrainingTracker.Pages
 {
@@ -30,16 +32,29 @@ namespace TrainingTracker.Pages
         public ViewModel.ActivityViewModel Activity { get; set; } = new();
 
         public List<ActivityViewModel> Activities { get; set; }
+        public int TotalActivitiesThisWeek { get; set; }
+        public int TotalActivitiesThisMonth { get; set; }
+        public double TotalDistanceThisWeek { get; set; }
+        public double TotalDistanceThisMonth { get; set; }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ShowRunning { get; set; } = true;
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ShowWalking { get; set; } = true;
+
+        [BindProperty(SupportsGet = true)]
+        [ValidateNever]
+        public string SortColumn { get; set; } = "";
+
+        [BindProperty(SupportsGet = true)]
+        [ValidateNever]
+        public bool SortDescending { get; set; } = false;
 
         public async Task OnGetAsync(int deleteId, int editId)
         {
+            
             var userId = _userManager.GetUserId(User);
             if (deleteId != 0)
             {
@@ -59,17 +74,36 @@ namespace TrainingTracker.Pages
                     Activity.ActivityDate = activity.ActivityDate;
                 }
             }
+
+            if(string.IsNullOrEmpty(SortColumn))
+            {
+                SortColumn = "Date";
+                SortDescending = true;
+            }
+
             await LoadFiltersAsync();
+
+            Activities = SortColumn switch
+            {
+                "Type" => SortDescending ? Activities.OrderByDescending(a => a.Type).ToList() : Activities.OrderBy(a => a.Type).ToList(),
+                "Title" => SortDescending ? Activities.OrderByDescending(a => a.Name).ToList() : Activities.OrderBy(a => a.Name).ToList(),
+                "Distance" => SortDescending ? Activities.OrderByDescending(a => a.Distance).ToList() : Activities.OrderBy(a => a.Distance).ToList(),
+                "Date" => SortDescending ? Activities.OrderByDescending(a => a.ActivityDate).ToList() : Activities.OrderBy(a => a.ActivityDate).ToList(),
+                _ => Activities
+            };
+            CalculateTotals();
             LoadActivityTypes();
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {
             await LoadFiltersAsync();
+            CalculateTotals();
             LoadActivityTypes();
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            CalculateTotals();
             if (!ModelState.IsValid)
             {
                 await LoadFiltersAsync();
@@ -117,6 +151,33 @@ namespace TrainingTracker.Pages
                 filtered.AddRange(allActivities.Where(a => a.Type == "Walking"));
 
             Activities = filtered;
+        }
+        public void CalculateTotals()
+        {
+            var totalActivitiesThisWeek = Activities
+                .Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == ISOWeek.GetWeekOfYear(DateTime.Now)).ToList();
+
+            TotalActivitiesThisWeek = totalActivitiesThisWeek.Count;
+            double weeklyDistance = 0; 
+            foreach(var act in totalActivitiesThisWeek)
+            {
+                weeklyDistance += act.Distance;
+            }
+            TotalDistanceThisWeek = weeklyDistance;
+
+
+
+            // Totala träningspass per månad
+            var totalActivitiesThisMonth = Activities
+                .Where(a => a.ActivityDate.Month == DateTime.Now.Month).ToList();
+
+            TotalActivitiesThisMonth = totalActivitiesThisMonth.Count();
+            double monthlyDistance = 0;
+            foreach (var act in totalActivitiesThisMonth)
+            {
+                monthlyDistance += act.Distance;
+            }
+            TotalDistanceThisMonth = monthlyDistance;
         }
 
     }
