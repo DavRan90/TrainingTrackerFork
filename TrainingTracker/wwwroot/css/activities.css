@@ -1,4 +1,11 @@
-﻿
+﻿.pill-fixed {
+    min-width: 4em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+    font-weight: 900;
+}
 
 .layout-content {
     padding: 0;
@@ -104,6 +111,12 @@
     overflow: hidden;
     max-height: 140px; 
     overflow-y: auto; /* scroll om fler rader */
+}
+
+.trainingstats-table-wrapper {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 8px 10px;
 }
 
 

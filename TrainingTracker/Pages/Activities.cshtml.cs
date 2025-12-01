@@ -33,9 +33,13 @@ namespace TrainingTracker.Pages
 
         public List<ActivityViewModel> Activities { get; set; }
         public int TotalActivitiesThisWeek { get; set; }
+        public int TotalActivitiesPreviousWeek { get; set; }
         public int TotalActivitiesThisMonth { get; set; }
+        public int TotalActivitiesPreviousMonth { get; set; }
         public double TotalDistanceThisWeek { get; set; }
+        public double TotalDistancePreviousWeek { get; set; }
         public double TotalDistanceThisMonth { get; set; }
+        public double TotalDistancePreviousMonth { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
@@ -156,14 +160,26 @@ namespace TrainingTracker.Pages
         {
             var totalActivitiesThisWeek = Activities
                 .Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == ISOWeek.GetWeekOfYear(DateTime.Now)).ToList();
+            var totalActivitiesPreviousWeek = Activities
+                .Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == ISOWeek.GetWeekOfYear(DateTime.Now.AddDays(-7))).ToList();
 
             TotalActivitiesThisWeek = totalActivitiesThisWeek.Count;
-            double weeklyDistance = 0; 
-            foreach(var act in totalActivitiesThisWeek)
+            TotalDistancePreviousWeek = totalActivitiesPreviousWeek.Count;
+
+            double weeklyDistance = 0;
+            double previousWeeklyDistance = 0;
+
+            foreach (var act in totalActivitiesThisWeek)
             {
                 weeklyDistance += act.Distance;
             }
+            foreach (var act in totalActivitiesPreviousWeek)
+            {
+                previousWeeklyDistance += act.Distance;
+            }
+
             TotalDistanceThisWeek = weeklyDistance;
+            TotalDistancePreviousWeek = previousWeeklyDistance;
 
 
 
@@ -171,13 +187,26 @@ namespace TrainingTracker.Pages
             var totalActivitiesThisMonth = Activities
                 .Where(a => a.ActivityDate.Month == DateTime.Now.Month).ToList();
 
+            var totalActivitiesPreviousMonth = Activities
+                .Where(a => a.ActivityDate.Month == DateTime.Now.AddMonths(-1).Month).ToList();
+
             TotalActivitiesThisMonth = totalActivitiesThisMonth.Count();
+            TotalDistancePreviousMonth = totalActivitiesPreviousMonth.Count();
+
             double monthlyDistance = 0;
+            double previousMonthlyDistance = 0;
+
             foreach (var act in totalActivitiesThisMonth)
             {
                 monthlyDistance += act.Distance;
             }
+            foreach (var act in totalActivitiesPreviousMonth)
+            {
+                previousMonthlyDistance += act.Distance;
+            }
+
             TotalDistanceThisMonth = monthlyDistance;
+            TotalDistancePreviousMonth = previousMonthlyDistance;
         }
 
     }

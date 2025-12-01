@@ -121,26 +121,128 @@
             <p class="activities-intro">
                 Statistics of training done recently
             </p>
+            <div class="trainingstats-table-wrapper">
+                <table class="activities-table">
+                    <thead>
+                        <tr>
+                            <th>This week</th>
+                            <th class="text-center">Change</th>
+                            <th>Last week</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td class="@(Model.TotalActivitiesThisWeek >= Model.TotalActivitiesPreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.TotalActivitiesThisWeek
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.TotalActivitiesThisWeek >= Model.TotalActivitiesPreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+
+                            <td>@Model.TotalActivitiesPreviousWeek</td>
+                        </tr>
+
+                       
+                        <tr>
+                            <td class="@(Model.TotalDistanceThisWeek >= Model.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.TotalDistanceThisWeek km
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.TotalDistanceThisWeek >= Model.TotalDistancePreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+
+                            <td>@Model.TotalDistancePreviousWeek km</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <th>This month</th>
+                            <th class="text-center">Change</th>
+                            <th>Last month</th>
+                        </tr>
+
+                        
+                        <tr>
+                            <td class="@(Model.TotalActivitiesThisMonth >= Model.TotalActivitiesPreviousMonth ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.TotalActivitiesThisMonth
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.TotalActivitiesThisMonth >= Model.TotalActivitiesPreviousMonth)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+
+                            <td>@Model.TotalActivitiesPreviousMonth</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <td class="@(Model.TotalDistanceThisMonth >= Model.TotalDistancePreviousMonth ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.TotalDistanceThisMonth km
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.TotalDistanceThisMonth >= Model.TotalDistancePreviousMonth)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+
+                            <td>@Model.TotalDistancePreviousMonth km</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
             <div>
                 <div class="mb-2 text-black">
-                    <label>Total activitites this week:</label>
-                    <br />
-                    <input asp-for="TotalActivitiesThisWeek" />
+                    <label>This week:</label>
+                    <input class="form-control activities-input" type="text" value="@Model.TotalActivitiesThisWeek" readonly />
                 </div>
+
                 <div class="mb-2 text-black">
-                    <label>Total activitites this month:</label>
-                    <br />
-                    <input asp-for="TotalActivitiesThisMonth" />
+                    <label>Activities:</label>
+                    <input class="form-control activities-input" type="text" value="@Model.TotalDistanceThisWeek" readonly />
                 </div>
+
                 <div class="mb-2 text-black">
-                    <label>Total distance this week:</label>
-                    <br />
-                    <input asp-for="TotalDistanceThisWeek" />
+                    <label>This month:</label>
+                    <input class="form-control activities-input" type="text" value="@Model.TotalActivitiesThisMonth" readonly />
                 </div>
+
+
+
                 <div class="mb-2 text-black">
-                    <label>Total distance this month:</label>
-                    <br />
-                    <input asp-for="TotalDistanceThisMonth" />
+                    <label>Distance:</label>
+                    <input class="form-control activities-input" type="text" value="@Model.TotalDistanceThisMonth" readonly />
                 </div>
 
             </div>
