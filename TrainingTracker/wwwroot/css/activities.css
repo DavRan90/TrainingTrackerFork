@@ -121,7 +121,7 @@
     padding: 8px 10px;
     overflow: hidden;
     max-height: 140px; 
-    overflow-y: auto; /* scroll om fler rader */
+    overflow-y: auto; 
 }
 
 .trainingstats-table-wrapper {

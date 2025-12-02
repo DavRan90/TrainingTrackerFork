@@ -25,60 +25,53 @@
 
     <div class="layout">
 
-        @* Menyn på vänstra sidan *@
-        <div class="layout-sidebar">
+        
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="layout-sidebar">
+                <div class="sidebar-logo">
+                    <img src="~/images/tti.png" alt="TrainingTracker Logo" class="sidebar-logo-image" />
+                </div>
 
-            <div class="sidebar-logo">
-                <img src="~/images/tti.png" alt="TrainingTracker Logo" class="sidebar-logo-image" />
+                <a class="sidebar-link" asp-page="/Index">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a class="sidebar-link" asp-page="/Activities">
+                    <i class="bi bi-list-check"></i>
+                    <span>Activities</span>
+                </a>
+
+                <a class="sidebar-link" asp-page="/ImportData">
+                    <i class="bi bi-upload"></i>
+                    <span>Import</span>
+                </a>
+
+                <a class="sidebar-link" asp-page="/Settings">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+
+                <form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" class="sidebar-logout-form">
+                    <button type="submit" class="sidebar-link sidebar-logout-button">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
             </div>
+        }
 
-
-            <a class="sidebar-link" asp-page="/Index">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <a class="sidebar-link" asp-page="/Activities">
-                <i class="bi bi-list-check"></i>
-                <span>Activities</span>
-            </a>
-
-            <a class="sidebar-link" asp-page="/Import">
-                <i class="bi bi-upload"></i>
-                <span>Import</span>
-            </a>
-
-            <a class="sidebar-link" asp-page="/Settings">
-                <i class="bi bi-gear"></i>
-                <span>Settings</span>
-            </a>
-
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
-                </a>
-            }
-            else
-            {
-                <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Login">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
-            }
-
+       
+        <div class="layout-content @(SignInManager.IsSignedIn(User) ? "" : "layout-content-full")">
+            <main role="main">
+                @RenderBody()
+            </main>
         </div>
 
-         <div class="layout-content">
-             <main role="main">
-                 @RenderBody()
-             </main>
-
-           
-         </div>
-
     </div>
+
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

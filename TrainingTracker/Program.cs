@@ -36,7 +36,17 @@ builder.Services.AddHttpClient("Backend", client =>
 
 builder.Services.AddScoped<ActivityAPIManager>();
 
-builder.Services.AddRazorPages();
+
+builder.Services.AddRazorPages(options =>
+{
+    // Allt under / kräver inloggning
+    options.Conventions.AuthorizeFolder("/");
+
+    // Tillåt anonym åtkomst till Identity login och register
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/Login");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/Register");
+});
+
 
 var app = builder.Build();
 
@@ -57,6 +67,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+
 
 app.MapRazorPages();
 
