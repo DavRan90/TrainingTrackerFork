@@ -1,11 +1,20 @@
 ﻿@page
 @model IndexModel
+
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="index-background">
 
+    <div class="ms-2 activities-panel w-25">
+        <center>
+        <div class="calendar-panel">
+            <h3>Kalender</h3>
+            <div id="activity-calendar"></div>
+        </div>
+        </center>
+        </div>
 
     <div class="ms-2 activities-panel w-25">
 
@@ -90,4 +99,52 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/index.css" />
     <link rel="stylesheet" href="~/css/activities.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" />
+    <style>
+       
+        .activity-day {
+            background-color: green !important; 
+            color: white !important; 
+            border-radius: 50% !important; 
+        }
+
+        
+        .calendar-panel {
+            /*width: 300px;
+            min-height: 350px; */
+            font-size: 20px;
+            background: transparent;
+            color: black;
+        }
+    </style>
+
 }
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            var activityDates = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+                Model.ActivityDates.Select(d => d.ToString("yyyy-MM-dd"))
+            ));
+
+            $('#activity-calendar').datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: false,
+                startView: 0,           
+                multidate: false,
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                beforeShowDay: function(date) {
+                    var dateString = date.toISOString().split('T')[0];
+                    if (activityDates.includes(dateString)) {
+                        return {classes: 'activity-day', tooltip: 'Activity'};
+                    }
+                    return;
+                }
+            }).datepicker('show'); 
+        });
+    </script>
+    }

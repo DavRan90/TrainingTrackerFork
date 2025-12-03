@@ -1,108 +1,77 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
 using TrainingTracker.DAL;
 using TrainingTracker.ViewModel;
 using TrainingTrackerAPI.Models;
-using static TrainingTracker.Pages.ActivitiesModel;
 
 namespace TrainingTracker.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly HttpClient _http;
         private readonly ActivityAPIManager _api;
-        private readonly ILogger<IndexModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user)
+        public IndexModel(ActivityAPIManager api, UserManager<ApplicationUser> user)
         {
-            _logger = logger;
-            _http = factory.CreateClient("Backend");
             _api = api;
             _userManager = user;
         }
 
-        public List<SelectListItem> ActivityTypes { get; set; }
-
-        [BindProperty]
-        public ViewModel.ActivityViewModel Activity { get; set; }
-
-        public List<ActivityViewModel> Activities { get; set; }
+        public List<ActivityViewModel> Activities { get; set; } = new();
+        public List<DateTime> ActivityDates { get; set; } = new();
         public ActivityTotals ActivityTotal { get; set; } = new();
 
-        public async Task OnGetAsync(int deleteId, int editId)
+        public async Task OnGetAsync()
         {
-            if (deleteId != 0)
-            {
-                await _api.DeleteActivity(deleteId);
-            }
-
-            if (editId != 0)
-            {
-                Activity = new();
-                var activity = await _api.GetActivity(editId);
-                Activity.Id = activity.Id;
-                Activity.Name = activity.Name;
-                Activity.Distance = activity.Distance;
-                Activity.Type = activity.Type;
-                Activity.ActivityDate = activity.ActivityDate;
-            }
             var userId = _userManager.GetUserId(User);
             Activities = await _api.GetAllActivities(userId);
 
-            ActivityTypes = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Running", Text = "Running" },
-                new SelectListItem { Value = "Walking", Text = "Walking" },
-                new SelectListItem { Value = "Cycling", Text = "Cycling" }
+            // Lista med datum för kalender
+            ActivityDates = Activities
+                .Select(a => a.ActivityDate.Date)
+                .Distinct()
+                .ToList();
 
-            };
-
+            ActivityTotal = CalculateTotalsToClass();
         }
-        public async Task<IActionResult> OnPostAsync()
+
+        // ===== ActivityTotals och metoder =====
+        public ActivityTotals CalculateTotalsToClass()
         {
+            var now = DateTime.Now;
+            var thisWeekNumber = ISOWeek.GetWeekOfYear(now);
+            var previousWeekNumber = ISOWeek.GetWeekOfYear(now.AddDays(-7));
+            var thisMonth = now.Month;
+            var previousMonth = now.AddMonths(-1).Month;
 
-            if (!ModelState.IsValid)
-            {
-                // Re-populate Activities and ActivityTypes before returning
-                var userId = _userManager.GetUserId(User);
-                Activities = await _api.GetAllActivities(userId);
-                ActivityTypes = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Running", Text = "Running" },
-                new SelectListItem { Value = "Walking", Text = "Walking" },
-                new SelectListItem { Value = "Cycling", Text = "Cycling" }
+            var thisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber).ToList();
+            var previousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber).ToList();
+            var thisMonthActs = Activities.Where(a => a.ActivityDate.Month == thisMonth).ToList();
+            var previousMonthActs = Activities.Where(a => a.ActivityDate.Month == previousMonth).ToList();
 
+            return new ActivityTotals
+            {
+                TotalActivitiesThisWeek = thisWeek.Count,
+                TotalDistanceThisWeek = thisWeek.Sum(a => a.Distance),
+                TotalCaloriesBurntThisWeek = thisWeek.Sum(a => a.CaloriesBurnt),
+                TotalDurationThisWeek = thisWeek.Sum(a => a.TotalTimeInSeconds),
+
+                TotalActivitiesPreviousWeek = previousWeek.Count,
+                TotalDistancePreviousWeek = previousWeek.Sum(a => a.Distance),
+                TotalCaloriesBurntPreviousWeek = previousWeek.Sum(a => a.CaloriesBurnt),
+                TotalDurationPreviousWeek = previousWeek.Sum(a => a.TotalTimeInSeconds),
+
+                TotalActivitiesThisMonth = thisMonthActs.Count,
+                TotalDistanceThisMonth = thisMonthActs.Sum(a => a.Distance),
+                TotalCaloriesBurntThisMonth = thisMonthActs.Sum(a => a.CaloriesBurnt),
+                TotalDurationThisMonth = thisMonthActs.Sum(a => a.TotalTimeInSeconds),
+
+                TotalActivitiesPreviousMonth = previousMonthActs.Count,
+                TotalDistancePreviousMonth = previousMonthActs.Sum(a => a.Distance),
+                TotalCaloriesBurntPreviousMonth = previousMonthActs.Sum(a => a.CaloriesBurnt),
+                TotalDurationPreviousMonth = previousMonthActs.Sum(a => a.TotalTimeInSeconds),
             };
-
-                return Page();
-            }
-
-            if (Activity.Id == null)
-            {
-                if (_userManager.GetUserId(User) != null)
-                {
-                    Activity.UserId = _userManager.GetUserId(User);
-
-                }
-                //Returns the created actívity
-                var response = await _api.SaveActivity(Activity);
-            }
-            else
-            {
-                //Returns true/false if it can update
-                var response = await _api.UpdateActivity(Activity, (int)Activity.Id);
-            }
-
-
-
-            return RedirectToPage("./Index");
-
-
-
-
         }
 
         public class ActivityTotals
@@ -124,23 +93,30 @@ namespace TrainingTracker.Pages
             public double TotalDistanceThisMonth { get; set; }
             public double TotalDistancePreviousMonth { get; set; }
 
-            public List<MetricRow> WeeklyRows =>
-        new()
-        {
-            new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisWeek, PreviousPeriod = TotalActivitiesPreviousWeek },
-            new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisWeek, PreviousPeriod = TotalDistancePreviousWeek, Unit = "km" },
-            new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisWeek, PreviousPeriod = TotalDurationPreviousWeek, Unit = "s" },
-            new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisWeek, PreviousPeriod = TotalCaloriesBurntPreviousWeek, Unit = "cal" }
-        };
+            public List<MetricRow> WeeklyRows => new()
+            {
+                new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisWeek, PreviousPeriod = TotalActivitiesPreviousWeek },
+                new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisWeek, PreviousPeriod = TotalDistancePreviousWeek, Unit = "km" },
+                new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisWeek, PreviousPeriod = TotalDurationPreviousWeek, Unit = "s" },
+                new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisWeek, PreviousPeriod = TotalCaloriesBurntPreviousWeek, Unit = "cal" }
+            };
 
-            public List<MetricRow> MonthlyRows =>
-                new()
-                {
-            new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisMonth, PreviousPeriod = TotalActivitiesPreviousMonth },
-            new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisMonth, PreviousPeriod = TotalDistancePreviousMonth, Unit = "km" },
-            new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisMonth, PreviousPeriod = TotalDurationPreviousMonth, Unit = "s" },
-            new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisMonth, PreviousPeriod = TotalCaloriesBurntPreviousMonth, Unit = "cal" }
-                };
+            public List<MetricRow> MonthlyRows => new()
+            {
+                new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisMonth, PreviousPeriod = TotalActivitiesPreviousMonth },
+                new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisMonth, PreviousPeriod = TotalDistancePreviousMonth, Unit = "km" },
+                new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisMonth, PreviousPeriod = TotalDurationPreviousMonth, Unit = "s" },
+                new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisMonth, PreviousPeriod = TotalCaloriesBurntPreviousMonth, Unit = "cal" }
+            };
+        }
+
+        public class MetricRow
+        {
+            public string Label { get; set; } = "";
+            public double ThisPeriod { get; set; }
+            public double PreviousPeriod { get; set; }
+            public bool IsUp => ThisPeriod >= PreviousPeriod;
+            public string Unit { get; set; } = "";
         }
     }
 }
