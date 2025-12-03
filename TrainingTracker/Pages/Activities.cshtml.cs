@@ -8,6 +8,8 @@ using TrainingTracker.DAL;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.Globalization;
+using TrainingTracker.Service;
+using TrainingTracker.FitConversion;
 
 namespace TrainingTracker.Pages
 {
@@ -33,6 +35,8 @@ namespace TrainingTracker.Pages
 
         public List<ActivityViewModel> Activities { get; set; }
         public ActivityTotals ActivityTotal { get; set; } = new();
+
+        public FitSport ActivityType { get; set; } = new();
 
         [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
@@ -111,8 +115,28 @@ namespace TrainingTracker.Pages
 
             if (Activity.Id == null)
             {
+                
+
+                switch (Activity.Type)
+                {
+                    case "Running":
+                        ActivityType = FitSport.Running;
+                        break;
+                    case "Walking":
+                        ActivityType = FitSport.Generic;
+                        break;
+                    case "Cycling":
+                       ActivityType = FitSport.Cycling;
+                        break;
+                    default:
+                        ModelState.AddModelError("Activity.Type", "Unsupported activity type");
+                        await LoadFiltersAsync();
+                        LoadActivityTypes();
+                        return Page();
+                }
                 Activity.TotalTime = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
                 Activity.UserId = _userManager.GetUserId(User);
+                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, ActivityType);
                 await _api.SaveActivity(Activity);
             }
             else
