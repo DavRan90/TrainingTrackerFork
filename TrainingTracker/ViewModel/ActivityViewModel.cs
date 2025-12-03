@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TrainingTracker.FitConversion;
+using TrainingTracker.Service;
 
 namespace TrainingTracker.ViewModel
 {
@@ -16,6 +18,14 @@ namespace TrainingTracker.ViewModel
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; } = DateTime.Today;
 
+        public int TotalTime { get; set; }
+
+        public TimeOnly TimeInput { get; set; }
+        public int TotalTimeInSeconds { get; set; }
+
         public string? UserId { get; set; }
+
+
+        public double CaloriesBurnt => CalorieService.CalculateCalories(70, TotalTimeInSeconds, FitSport.Running);
     }
 }
