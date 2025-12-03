@@ -29,7 +29,7 @@ namespace TrainingTracker.Pages
         }
 
         //public List<SelectListItem> ActivityTypes { get; set; }
-        public ActivityType ActivityType { get; set; }
+        public ViewModel.SportType ActivityType { get; set; }
         public IEnumerable<SelectListItem> ActivityTypeItems { get; set; }
 
         [BindProperty]
@@ -76,20 +76,9 @@ namespace TrainingTracker.Pages
                     Activity.Type = activity.Type;
                     Activity.ActivityDate = activity.ActivityDate;
                     Activity.TimeInput = activity.TimeInput;
-                    //switch (Activity.Type)
-                    //{
-                    //    case "Running":
-                    //        ActivityType = FitSport.Running;
-                    //        break;
-                    //    case "Walking":
-                    //        ActivityType = FitSport.Generic;
-                    //        break;
-                    //    case "Cycling":
-                    //        ActivityType = FitSport.Cycling;
-                    //        break;
-                    //}
+                    Activity.SportType = activity.SportType;
                     Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
-                    Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, FitSport.Running);
+                    Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, Activity.SportType);
                 }
             }
 
@@ -121,7 +110,7 @@ namespace TrainingTracker.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            
+            Activity.Type = Activity.SportType.ToString();
             if (!ModelState.IsValid)
             {
                 await LoadFiltersAsync();
@@ -133,50 +122,16 @@ namespace TrainingTracker.Pages
             {
                 
 
-                //switch (Activity.Type)
-                //{
-                //    case "Running":
-                //        ActivityType = FitSport.Running;
-                //        break;
-                //    case "Walking":
-                //        ActivityType = FitSport.Generic;
-                //        break;
-                //    case "Cycling":
-                //       ActivityType = FitSport.Cycling;
-                //        break;
-                //    default:
-                //        ModelState.AddModelError("Activity.Type", "Unsupported activity type");
-                //        await LoadFiltersAsync();
-                //        LoadActivityTypes();
-                //        return Page();
-                //}
                 Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
                 Activity.UserId = _userManager.GetUserId(User);
                 //TODO
-                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, FitSport.Running);
+                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, Activity.SportType);
                 await _api.SaveActivity(Activity);
             }
             else
             {
-                //switch (Activity.Type)
-                //{
-                //    case "Running":
-                //        ActivityType = FitSport.Running;
-                //        break;
-                //    case "Walking":
-                //        ActivityType = FitSport.Generic;
-                //        break;
-                //    case "Cycling":
-                //        ActivityType = FitSport.Cycling;
-                //        break;
-                //    default:
-                //        ModelState.AddModelError("Activity.Type", "Unsupported activity type");
-                //        await LoadFiltersAsync();
-                //        LoadActivityTypes();
-                //        return Page();
-                //}
                 Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
-                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, FitSport.Running);
+                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, Activity.SportType);
                 await _api.UpdateActivity(Activity, (int)Activity.Id);
             }
 
@@ -304,8 +259,8 @@ namespace TrainingTracker.Pages
 
         public void SetEnumValues()
         {
-            ActivityTypeItems = Enum.GetValues(typeof(ActivityType))
-                .Cast<ActivityType>()
+            ActivityTypeItems = Enum.GetValues(typeof(ViewModel.SportType))
+                .Cast<ViewModel.SportType>()
                 .Select(a => new SelectListItem
                 {
                     Value = ((int)a).ToString(),

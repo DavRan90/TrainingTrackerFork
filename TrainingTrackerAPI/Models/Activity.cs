@@ -13,6 +13,7 @@ namespace TrainingTrackerAPI.Models
         public double Distance { get; set; }
         public int TotalTimeInSeconds { get; set; }
         public TimeOnly TimeInput { get; set; }
+        public SportType SportType { get; set; }
         public double? CaloriesBurned { get; set; }
         public ApplicationUser? User { get; set; }
 

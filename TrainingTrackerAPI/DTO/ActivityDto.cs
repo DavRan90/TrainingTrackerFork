@@ -1,4 +1,6 @@
-﻿namespace TrainingTrackerAPI.DTO
+﻿using TrainingTrackerAPI.Models;
+
+namespace TrainingTrackerAPI.DTO
 {
     public class ActivityDto
     {
@@ -14,5 +16,6 @@
         public TimeOnly TimeInput { get; set; }
         public string? UserId { get; set; }
         public double? Calories { get; set; }
+        public SportType SportType { get; set; }
     }
 }

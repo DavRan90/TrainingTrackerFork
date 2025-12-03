@@ -20,11 +20,12 @@
             <input asp-for="Activity.Id" type="hidden" />
             <input asp-for="SortColumn" type="hidden" />
             <input asp-for="SortDescending" type="hidden" />
+            <input asp-for="Activity.Type" type="hidden" value="Running"/>
             <div class="mb-2">
-                <select asp-for="Activity.ActivityType"
+                <select asp-for="Activity.SportType"
                         asp-items="Model.ActivityTypeItems"
                         class="form-select activities-input">
-                    <option value="">Select activity type</option>
+                    <option value="" selected>Select activity type</option>
                 </select>
             </div>
 
@@ -121,7 +122,7 @@
                     {
                         <tr>
                             @* <td class="text-muted">@activity.Id</td> *@
-                            <td>@activity.Type</td>
+                            <td>@activity.SportType.ToString()</td>
                             <td>@activity.Name</td>
                             <td>@activity.Distance</td>
                             <td>@activity.ActivityDate</td>

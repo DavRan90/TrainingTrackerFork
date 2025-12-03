@@ -34,9 +34,9 @@ namespace TrainingTrackerAPI.Controllers
                         TotalTimeInSeconds = newActivity.TotalTime,
                         TimeInput = newActivity.TimeInput,
                         CaloriesBurned = newActivity.Calories,
-
                         AverageCadence = 0,
-                        UserId = newActivity.UserId
+                        UserId = newActivity.UserId,
+                        SportType = newActivity.SportType,
                     };
                     break;
 
@@ -50,6 +50,7 @@ namespace TrainingTrackerAPI.Controllers
                         TimeInput = newActivity.TimeInput,
                         UserId = newActivity.UserId,
                         CaloriesBurned = newActivity.Calories,
+                        SportType = newActivity.SportType,
                     };
                     break;
 
@@ -63,6 +64,7 @@ namespace TrainingTrackerAPI.Controllers
                         TimeInput = newActivity.TimeInput,
                         UserId = newActivity.UserId,
                         CaloriesBurned = newActivity.Calories,
+                        SportType = newActivity.SportType,
                         // Lägg till andra properties om du har dem, t.ex. AverageSpeed
                     };
                     break;
@@ -94,6 +96,7 @@ namespace TrainingTrackerAPI.Controllers
             activityToEdit.TotalTimeInSeconds = editDto.TotalTimeInSeconds;
             activityToEdit.TimeInput = editDto.TimeInput;
             activityToEdit.CaloriesBurned = editDto.Calories;
+            activityToEdit.SportType = editDto.SportType;
             //activityToEdit.AverageCadence = editDto.AverageCadence;
 
             await _context.SaveChangesAsync();
@@ -117,7 +120,7 @@ namespace TrainingTrackerAPI.Controllers
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
                     Calories = a.CaloriesBurned,
-
+                    SportType = a.SportType,
 
 
 
@@ -147,6 +150,7 @@ namespace TrainingTrackerAPI.Controllers
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
                     Calories = a.CaloriesBurned,
+                    SportType = a.SportType,
                 })
                 .FirstOrDefaultAsync();
 

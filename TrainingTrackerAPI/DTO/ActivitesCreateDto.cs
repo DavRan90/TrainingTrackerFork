@@ -18,6 +18,7 @@ namespace TrainingTrackerAPI.DTO
         public DateTime ActivityDate { get; set; }
         public string? UserId { get; set; }
         public int TotalTime { get; set; }
+        public SportType SportType { get; set; }
         public TimeOnly TimeInput { get; set; }
         public double Calories { get; set; }
 
