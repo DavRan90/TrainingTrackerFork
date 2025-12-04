@@ -5,7 +5,7 @@ using TrainingTracker.DAL;
 using TrainingTracker.ViewModel;
 using TrainingTrackerAPI.Models;
 
-namespace TrainingTracker.Pages
+public class IndexModel : PageModel
 {
     public class IndexModel : PageModel
     {
@@ -27,7 +27,7 @@ namespace TrainingTracker.Pages
             var userId = _userManager.GetUserId(User);
             Activities = await _api.GetAllActivities(userId);
 
-            // Lista med datum för kalender
+            // Lista med datum fÃ¶r kalender
             ActivityDates = Activities
                 .Select(a => a.ActivityDate.Date)
                 .Distinct()
@@ -119,4 +119,10 @@ namespace TrainingTracker.Pages
             public string Unit { get; set; } = "";
         }
     }
+}
+
+public class Workout
+{
+    public DateTime Date { get; set; }
+    public string Type { get; set; }
 }
