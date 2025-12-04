@@ -23,7 +23,7 @@
             <input asp-for="Activity.Type" type="hidden" value="Running" />
             <div class="mb-2">
                 <select asp-for="Activity.SportType"
-                        asp-items="Model.ActivityTypeItems"
+                        asp-items="Model.SportTypeOptions"
                         class="form-select activities-input">
                     <option value="" selected>Select activity type</option>
                 </select>
@@ -112,7 +112,7 @@
                             @* <td class="text-muted">@activity.Id</td> *@
                             <td>@activity.SportType.ToString()</td>
                             <td>@activity.Name</td>
-                            <td>@activity.Distance</td>
+                            <td>@($"{activity.Distance:F1} km")</td>
                             <td>@activity.ActivityDate</td>
                             <td>@activity.TimeInput.ToString("HH:mm:ss")</td>
                             <td>@activity.Calories?.ToString("F0")</td>
