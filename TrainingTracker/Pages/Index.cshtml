@@ -1,25 +1,182 @@
 ﻿@page
 @model IndexModel
+
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="index-background">
 
-    <h2>Träningskalender</h2>
+    <div class="ms-2 calendar-size">
+        <center>
+            <div class="calendar-panel">
+            <h3>Kalender</h3>
+            <div id="activity-calendar"></div>
+        </div>
+        </center>
+        </div>
 
-    <div id="calendar">
-        @foreach (var day in Enumerable.Range(0, 7).Select(i => DateTime.Today.AddDays(-i)))
-        {
-            var workout = Model.Workouts.FirstOrDefault(w => w.Date.Date == day.Date);
-            <div class="calendar-day @(workout != null ? "workout-day" : "")">
-                <strong>@day.ToString("ddd dd")</strong>
-                @if (workout != null)
-                {
-                    <div>@workout.Type</div>
-                }
+    <div class="ms-2 activities-panel">
+
+        <div>
+            <h1 class="activities-title">Training Stats</h1>
+            <p class="activities-intro">
+                Statistics of training done recently
+            </p>
+            <div class="trainingstats-table-wrapper">
+                <table class="activities-table">
+                    <thead>
+                        <tr>
+                            <th>This week</th>
+                            <th class="text-center">Trend</th>
+                            <th>Last week</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.ActivityTotal.WeeklyRows)
+                        {
+                            <tr>
+                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                    @row.ThisPeriod.ToString("F0") @row.Unit
+                                </td>
+
+                                <td class="text-center">
+                                    @if (row.IsUp)
+                                    {
+                                        <i class="bi bi-caret-up-fill text-success"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-caret-down-fill text-danger"></i>
+                                    }
+                                </td>
+
+                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <th>This month</th>
+                            <th class="text-center">Trend</th>
+                            <th>Last month</th>
+                        </tr>
+
+                        @foreach (var row in Model.ActivityTotal.MonthlyRows)
+                        {
+                            <tr>
+                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                    @row.ThisPeriod.ToString("F0") @row.Unit
+                                </td>
+
+                                <td class="text-center">
+                                    @if (row.IsUp)
+                                    {
+                                        <i class="bi bi-caret-up-fill text-success"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-caret-down-fill text-danger"></i>
+                                    }
+                                </td>
+
+                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
             </div>
-        }
+        </div>
     </div>
 
+
 </div>
+
+
+
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/activities.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" />
+    <style>
+        #activity-calendar {
+            width: 300px; /* or any width you prefer */
+            margin: 0 auto; /* CENTER the anchor */
+        }
+        .activity-day {
+            background-color: green !important; 
+            color: white !important; 
+            border-radius: 50% !important; 
+        }
+
+        .calendar-size{
+            
+            width: 25vw;
+            height: 50vh;
+        }
+
+        
+
+        .activities-panel {
+            width: 25vw; 
+           /*  height: 50vh; */
+            min-width: 200px;
+            min-height: fit-content;
+        }
+
+        
+        .calendar-panel {
+
+            text-align: center;
+            align-content: center;
+            
+            background: transparent;
+            color: black;
+        }
+
+        .datepicker {
+            
+            transform: scale(1.5);
+            transform-origin: top left;
+            align-content: center;
+        }
+
+        /* .datepicker-dropdown {
+            left: 50% !important;
+            transform: translateX(-50%) scale(1.4);
+            transform-origin: top center;
+        } */
+    </style>
+
+}
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            var activityDates = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+                Model.ActivityDates.Select(d => d.ToString("yyyy-MM-dd"))
+            ));
+
+            $('#activity-calendar').datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: false,
+                startView: 0,           
+                multidate: false,
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                beforeShowDay: function(date) {
+                    var dateString = date.toISOString().split('T')[0];
+                    if (activityDates.includes(dateString)) {
+                        return {classes: 'activity-day', tooltip: 'Activity'};
+                    }
+                    return;
+                }
+            }).datepicker('show'); 
+        });
+    </script>
+    }
