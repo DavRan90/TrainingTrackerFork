@@ -205,10 +205,6 @@ namespace TrainingTracker.Pages
             public double TotalDurationThisWeek { get; set; }
             public double TotalDurationPreviousMonth { get; set; }
             public double TotalDurationThisMonth { get; set; }
-            //public string? TotalDurationPreviousWeek { get; set; }
-            //public string? TotalDurationThisWeek { get; set; }
-            //public string? TotalDurationPreviousMonth { get; set; }
-            //public string? TotalDurationThisMonth { get; set; }
             public double TotalCaloriesBurntPreviousWeek { get; set; }
             public double TotalCaloriesBurntThisWeek { get; set; }
             public double TotalCaloriesBurntPreviousMonth { get; set; }
@@ -243,7 +239,6 @@ namespace TrainingTracker.Pages
         public class MetricRow
         {
             public string Label { get; set; } = "";
-            //public string DurationThisPeriod { get; set; } = "";
             public double ThisPeriod { get; set; }
             public double PreviousPeriod { get; set; }
 

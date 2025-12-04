@@ -16,9 +16,9 @@
 
 
         <!-- FORM: samma backend-fält, bara lite snyggare -->
-        <form method="post">
+        <form method="post" asp-page-handler="">
             <input asp-for="Activity.Id" type="hidden" />
-            <input asp-for="SortColumn" type="hidden" />
+            <input asp-for="SortColumn" type="hidden" value="Date" />
             <input asp-for="SortDescending" type="hidden" />
             <input asp-for="Activity.Type" type="hidden" value="Running" />
             <div class="mb-2">
