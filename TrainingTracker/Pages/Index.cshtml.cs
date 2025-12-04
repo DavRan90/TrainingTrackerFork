@@ -5,8 +5,7 @@ using TrainingTracker.DAL;
 using TrainingTracker.ViewModel;
 using TrainingTrackerAPI.Models;
 
-public class IndexModel : PageModel
-{
+
     public class IndexModel : PageModel
     {
         private readonly ActivityAPIManager _api;
@@ -119,7 +118,7 @@ public class IndexModel : PageModel
             public string Unit { get; set; } = "";
         }
     }
-}
+
 
 public class Workout
 {
