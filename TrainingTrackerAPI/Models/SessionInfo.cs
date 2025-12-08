@@ -1,4 +1,4 @@
-﻿namespace TrainingTracker.FitConversion
+﻿namespace TrainingTrackerAPI.Models
 {
     public class SessionInfo
     {
@@ -13,8 +13,6 @@
         public int AvgHeartRate { get; set; }
         public int AvgCadence { get; set; }
         public string UserId { get; set; }
-
-
         public DateTime StartDateTime => FitHelpers.FromFitTimestamp(StartTime);
 
         public double DistanceKm => FitHelpers.MetersToKm(TotalDistance);
@@ -27,6 +25,6 @@
 
         public string AvgPace => FitHelpers.SpeedToPace(AvgSpeed);
 
-        public FitSport SportEnum => (FitSport)Sport;
+        public SportType SportEnum => (SportType)Sport;
     }
 }

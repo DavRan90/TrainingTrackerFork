@@ -64,6 +64,9 @@
         height: 50vh;
     }
 }
+.day {
+    min-width: 2em;
+}
 .activities-panel {
     width: 100%;
     max-width: 1000px;

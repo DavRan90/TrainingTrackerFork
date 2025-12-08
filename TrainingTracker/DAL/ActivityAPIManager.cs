@@ -14,6 +14,19 @@ namespace TrainingTracker.DAL
         {
             _http = factory.CreateClient("Backend");
         }
+        public async Task<ActivityViewModel> UploadActivity(TrainingTracker.FitConversion.SessionInfo activity)
+        {
+            var response = await _http.PostAsJsonAsync("/api/Activities/Upload", activity);
+            if (response.IsSuccessStatusCode)
+            {
+                var createdActivity = response.Content.ReadFromJsonAsync<ActivityViewModel>().Result;
+                return createdActivity ?? new ActivityViewModel();
+            }
+            else
+            {
+                return new ActivityViewModel();
+            }
+        }
 
         public async Task<ActivityViewModel> SaveActivity(ActivityViewModel activity)
         {
