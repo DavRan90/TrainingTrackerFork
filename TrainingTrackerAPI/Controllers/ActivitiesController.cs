@@ -17,6 +17,77 @@ namespace TrainingTrackerAPI.Controllers
         {
             _context = context;
         }
+        [HttpPost("Upload")]
+        public async Task<IActionResult> UploadActivity([FromBody] SessionInfo sessionInfo)
+        {
+            Activity activity = new();
+            //activity.UserId = newActivity.UserId;
+            string[] formats = { "ss", "mm:ss", "hh:mm:ss" };
+            TimeOnly timeResult = new();
+            var success = TimeOnly.TryParseExact(sessionInfo.TotalTimeHms, formats, out var result);
+            if(success)
+            {
+                timeResult = result;
+            }
+
+
+                switch (sessionInfo.Sport)
+            {
+                case 1:
+                    activity = new Running
+                    {
+                        Name = sessionInfo.ActivityName ?? "New Run",
+                        Distance = sessionInfo.TotalDistance / 1000,
+                        ActivityDate = sessionInfo.StartDateTime,
+                        TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
+                        TimeInput = timeResult,
+                        CaloriesBurned = sessionInfo.TotalCalories,
+                        AverageCadence = sessionInfo.AvgCadence,
+                        UserId = sessionInfo.UserId,
+                        SportType = SportType.Running,
+                    };
+                    break;
+
+                case 7:
+                    activity = new Walking
+                    {
+                        Name = sessionInfo.ActivityName ?? "New Walk",
+                        Distance = sessionInfo.TotalDistance / 1000,
+                        ActivityDate = sessionInfo.StartDateTime,
+                        TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
+                        TimeInput = timeResult,
+                        CaloriesBurned = sessionInfo.TotalCalories,
+                        AverageCadence = sessionInfo.AvgCadence,
+                        UserId = sessionInfo.UserId,
+                        SportType = SportType.Walking,
+                    };
+                    break;
+
+                case 2:
+                    activity = new Cycling
+                    {
+                        Name = sessionInfo.ActivityName ?? "New Ride",
+                        Distance = sessionInfo.TotalDistance / 1000,
+                        ActivityDate = sessionInfo.StartDateTime,
+                        TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
+                        TimeInput = timeResult,
+                        CaloriesBurned = sessionInfo.TotalCalories,
+                        AvarageWatts = (int)sessionInfo.AvgPower,
+                        UserId = sessionInfo.UserId,
+                        SportType = SportType.Cycling,
+                        // Lägg till andra properties om du har dem, t.ex. AverageSpeed
+                    };
+                    break;
+
+                default:
+                    return BadRequest("Unsupported activity type");
+            }
+
+            _context.Activities.Add(activity);
+            await _context.SaveChangesAsync();
+
+            return Ok(activity);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateActivity([FromBody] DTO.ActivitesCreateDto newActivity)
         {

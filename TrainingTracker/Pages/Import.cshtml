@@ -8,6 +8,11 @@
 
         <h1 class="settings-title">Import FIT File</h1>
         <form method="post" enctype="multipart/form-data">
+            <div class="mb-2">
+                <label asp-for="SessionTitle" class="text-black ms-2"></label>
+                <input asp-for="SessionTitle"
+                       class="form-control activities-input" />
+            </div>
             <input type="file" name="FitFile" accept=".fit" class="text-black" />
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
@@ -15,7 +20,69 @@
             <div class="text-black">
                 @if (Model.Session != null)
                 {
-                    <p>Start time: @Model.Session.StartDateTime</p>
+                    <h3>Uploaded Activity</h3>
+                    <form method="post">
+                        <div class="mb-2">
+                            <label asp-for="Session.ActivityName" class="text-black ms-2"></label>
+                            <input asp-for="Session.ActivityName"
+                                   class="form-control activities-input" />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.SportEnum" class="text-black ms-2"></label>
+                            <input asp-for="Session.SportEnum" disabled
+                                   class="form-control activities-input"/>
+                        </div>
+
+                        <div class="mb-2">
+                            <label asp-for="Session.StartDateTime" class="text-black ms-2"></label>
+                            <input asp-for="Session.StartDateTime" disabled
+                                   class="form-control activities-input" />
+                        </div>
+
+                        <div class="mb-2">
+                            <label asp-for="Session.TotalTimeHms" class="text-black ms-2"></label>
+                            <input asp-for="Session.TotalTimeHms" class="form-control activities-input" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Session.DistanceKm" class="text-black ms-2"></label>
+                            <input asp-for="Session.DistanceKm" disabled
+                                   type="number"
+                                   class="form-control activities-input"
+                                   placeholder="Distance" />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.AvgSpeedKmH" class="text-black ms-2"></label>
+                            <input asp-for="Session.AvgSpeedKmH" class="form-control activities-input" disabled />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.AvgPace" class="text-black ms-2"></label>
+                            <input asp-for="Session.AvgPace" class="form-control activities-input" disabled />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.TotalCalories" class="text-black ms-2"></label>
+                            <input asp-for="Session.TotalCalories" class="form-control activities-input" disabled />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.AvgPower" class="text-black ms-2"></label>
+                            <input asp-for="Session.AvgPower" class="form-control activities-input" disabled />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.AvgHeartRate" class="text-black ms-2"></label>
+                            <input asp-for="Session.AvgHeartRate" class="form-control activities-input" disabled />
+                        </div>
+                        <div class="mb-2">
+                            <label asp-for="Session.AvgCadenceActual" class="text-black ms-2"></label>
+                            <input asp-for="Session.AvgCadenceActual" class="form-control activities-input" disabled />
+                        </div>
+
+                        @* <button type="submit" class="activities-btn mb-5 btn btn-primary">
+                            Confirm activity
+                        </button> *@
+
+
+                    </form>
+                    @* <p>Start time: @Model.Session.StartDateTime</p>
                     <p>Total time: @Model.Session.TotalTimeHms</p>
                     <p>Distance: @Model.Session.DistanceKm.ToString("0.00") km</p>
                     <p>Avg speed: @Model.Session.AvgSpeedKmH.ToString("0.0") km/h</p>
@@ -24,17 +91,17 @@
                     <p>Sport: @Model.Session.SportEnum</p>
                     <p>Avg power: @Model.Session.AvgPower W</p>
                     <p>Avg HR: @Model.Session.AvgHeartRate bpm</p>
-                    <p>Avg cadence: @Model.Session.AvgCadenceActual</p>
+                    <p>Avg cadence: @Model.Session.AvgCadenceActual</p> *@
                 }
             </div>
 
     </div>
 </div>
-@if (Model.JsonOutput != null)
+@* @if (Model.JsonOutput != null)
 {
     <h4>Session JSON Output</h4>
     <pre>@Model.JsonOutput</pre>
-}
+} *@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/settings.css" />
