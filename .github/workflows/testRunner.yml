@@ -31,3 +31,12 @@ jobs:
         run: dotnet test --no-restore --logger  "console;verbosity=minimal"
         env:
           USE_SQLITE: "true"
+
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               -d "{\"content\":\"Test från GitHub Actions\"}" \
+               "$DISCORD_WEBHOOK_URL"
