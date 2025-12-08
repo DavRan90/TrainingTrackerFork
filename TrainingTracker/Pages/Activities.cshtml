@@ -65,15 +65,42 @@
         </form>
 
         <form method="post" asp-page-handler="Filter">
-            <input type="checkbox" asp-for="ShowCycling" onchange="this.form.submit()" hidden />
-            <label asp-for="ShowCycling" class="badge rounded-pill pill-activity-type btn @(Model.ShowCycling ? "btn-primary" : "btn-outline-primary")">🚴</label>
+            
+            <input type="checkbox"
+                   asp-for="ShowCycling"
+                   onchange="this.form.submit()"
+                   hidden />
 
-            <input type="checkbox" asp-for="ShowRunning" onchange="this.form.submit()" hidden />
-            <label asp-for="ShowRunning" class="badge rounded-pill pill-activity-type btn @(Model.ShowRunning ? "btn-primary" : "btn-outline-primary")">🏃</label>
+            <label asp-for="ShowCycling" class="activity-filter">
+                @* OFF bild (när filtret är AV)  *@
+                <img src="~/images/cafter.png" alt="Cykling av" class="icon-default" />
+                @* ON bild (när filtret är PÅ)  *@
+                <img src="~/images/iconcy.png" alt="Cykling på" class="icon-active" />
+            </label>
 
-            <input type="checkbox" asp-for="ShowWalking" onchange="this.form.submit()" hidden />
-            <label asp-for="ShowWalking" class="badge rounded-pill pill-activity-type btn @(Model.ShowWalking ? "btn-primary" : "btn-outline-primary")">🚶</label>
+            
+            <input type="checkbox"
+                   asp-for="ShowRunning"
+                   onchange="this.form.submit()"
+                   hidden />
+
+            <label asp-for="ShowRunning" class="activity-filter">
+                <img src="~/images/iconjoggingafter.png" alt="Löpning av" class="icon-default" />
+                <img src="~/images/iconjogging.png" alt="Löpning på" class="icon-active" />
+            </label>
+
+            
+            <input type="checkbox"
+                   asp-for="ShowWalking"
+                   onchange="this.form.submit()"
+                   hidden />
+
+            <label asp-for="ShowWalking" class="activity-filter">
+                <img src="~/images/iconwalkafter.png" alt="Promenad av" class="icon-default" />
+                <img src="~/images/iconwalk.png" alt="Promenad på" class="icon-active" />
+            </label>
         </form>
+
 
 
         @* Tabellen med aktiviteter *@
