@@ -27,7 +27,7 @@
         padding: 0;
     }
 
-/* Ingen footer på sidan (annars puttar den ner sidan) */
+
 .layout-footer {
     display: none;
 }
@@ -168,7 +168,7 @@
         text-align: left;
     }
 
-    /* Randiga rader */
+   
     .activities-table tbody tr:nth-child(even) {
         background-color: #fbf8ee;
     }
@@ -178,7 +178,7 @@
         background-color: #f3eee0;
     }
 
-    /* Sista kolumnen (Edit/Delete) högerställd */
+   
     .activities-table th:last-child,
     .activities-table td:last-child {
         text-align: right;
@@ -189,3 +189,39 @@
     .activities-table td.text-muted {
         color: #888;
     }
+
+
+.activity-filter {
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 8px; 
+}
+
+    .activity-filter img {
+        width: 65px; 
+        height: 65px;
+        transition: transform 0.15s ease;
+    }
+
+    .activity-filter:hover img {
+        transform: scale(1.2); 
+    }
+
+    
+    .activity-filter .icon-active {
+        display: none;
+    }
+
+/* När checkboxen är ikryssad visas ON-ikon och gömmer OFF ikonen */
+input[type="checkbox"]:checked + label .icon-default {
+    display: none;
+}
+
+input[type="checkbox"]:checked + label .icon-active {
+    display: inline-block;
+}
+
+/*Muspekaren blir “hand” över ikonerna */
+.activity-filter {
+    cursor: pointer;
+}
