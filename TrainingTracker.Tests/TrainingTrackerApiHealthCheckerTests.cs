@@ -53,7 +53,7 @@ namespace TrainingTracker.Tests
 
             //Assert
             response.EnsureSuccessStatusCode();
-            Assert.Equal(created.Name, activity.Name);
+            Assert.Equal(created?.Name, activity.Name);
 
 
         }
