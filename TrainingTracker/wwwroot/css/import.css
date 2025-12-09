@@ -1,4 +1,4 @@
-﻿
+
 .layout-content {
     padding: 0;
     background: transparent;
@@ -13,10 +13,6 @@
     display: none;
 }
 
-
-
-
-
 .import-background {
     height: 100vh;
     width: 100%;
@@ -30,13 +26,10 @@
     padding-top: 32px;
 }
 
-
-
 .uploaded-activity {
     max-height: 300px; 
     overflow-y: auto;
 }
-
 
 .import-panel {
     width: 100%;
@@ -49,7 +42,6 @@
     border-top: 4px solid #F27F31;
 }
 
-
 .import-title {
     font-size: 26px;
     font-weight: 600;
@@ -57,7 +49,6 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #020617;
 }
-
 
 .import-intro {
     margin-bottom: 16px;
