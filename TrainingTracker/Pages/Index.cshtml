@@ -96,86 +96,24 @@
 
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/css/activities.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" />
-    <style>
-        #activity-calendar {
-            width: 300px; /* or any width you prefer */
-            margin: 0 auto; /* CENTER the anchor */
-        }
-        .activity-day {
-            background-color: green !important; 
-            color: white !important; 
-            border-radius: 50% !important; 
-        }
-
-        .calendar-size{
-            
-            width: 25vw;
-            height: 50vh;
-        }
-
-        
-
-        .activities-panel {
-            width: 25vw; 
-           /*  height: 50vh; */
-            min-width: 200px;
-            min-height: fit-content;
-        }
-
-        
-        .calendar-panel {
-
-            text-align: center;
-            align-content: center;
-            
-            background: transparent;
-            color: black;
-        }
-
-        .datepicker {
-            
-            transform: scale(1.5);
-            transform-origin: top left;
-            align-content: center;
-        }
-
-        /* .datepicker-dropdown {
-            left: 50% !important;
-            transform: translateX(-50%) scale(1.4);
-            transform-origin: top center;
-        } */
-    </style>
+    
 
 }
+
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+
     <script>
-        $(document).ready(function() {
-
-            var activityDates = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
-                Model.ActivityDates.Select(d => d.ToString("yyyy-MM-dd"))
-            ));
-
-            $('#activity-calendar').datepicker({
-                format: 'yyyy-mm-dd',
-                todayHighlight: true,
-                autoclose: false,
-                startView: 0,           
-                multidate: false,
-                todayBtn: "linked",
-                keyboardNavigation: false,
-                forceParse: false,
-                beforeShowDay: function(date) {
-                    var dateString = date.toISOString().split('T')[0];
-                    if (activityDates.includes(dateString)) {
-                        return {classes: 'activity-day', tooltip: 'Activity'};
-                    }
-                    return;
-                }
-            }).datepicker('show'); 
-        });
+        window.activityDates = @Html.Raw(
+                    Newtonsoft.Json.JsonConvert.SerializeObject(
+                            Model.ActivityDates.Select(d => d.ToString("yyyy-MM-dd"))
+                    )
+            );
     </script>
-    }
+
+    <script src="~/js/index.js" asp-append-version="true"></script>
+}
+

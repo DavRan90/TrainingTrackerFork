@@ -1,11 +1,3 @@
-﻿.import-info {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    padding: 8px 10px;
-    overflow: hidden;
-    max-height: 540px;
-    overflow-y: auto;
-}
 
 .layout-content {
     padding: 0;
@@ -21,7 +13,7 @@
     display: none;
 }
 
-.settings-background {
+.import-background {
     height: 100vh;
     width: 100%;
     background-image: url("/images/settingspic.png");
@@ -34,8 +26,12 @@
     padding-top: 32px;
 }
 
+.uploaded-activity {
+    max-height: 300px; 
+    overflow-y: auto;
+}
 
-.settings-panel {
+.import-panel {
     width: 100%;
     max-width: 1000px;
     background: rgba(252, 248, 235, 0.96);
@@ -46,8 +42,7 @@
     border-top: 4px solid #F27F31;
 }
 
-
-.settings-title {
+.import-title {
     font-size: 26px;
     font-weight: 600;
     margin-bottom: 14px;
@@ -55,28 +50,8 @@
     color: #020617;
 }
 
-
-.settings-intro {
+.import-intro {
     margin-bottom: 16px;
     font-size: 14px;
     color: #6b7280;
 }
-
-.settings-btn {
-    display: inline-block;
-    margin-top: 4px;
-    padding: 7px 26px;
-    font-size: 15px;
-    font-weight: 500;
-    background-color: #F27F31;
-    border: 1px solid #F27F31;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-
-}
-
-    .settings-btn:hover {
-        background-color: #E06F22;
-        border-color: #E06F22;
-    }
