@@ -12,7 +12,7 @@
         public int Sport { get; set; }
         public int AvgHeartRate { get; set; }
         public int AvgCadence { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime StartDateTime => FitHelpers.FromFitTimestamp(StartTime);
 
         public double DistanceKm => FitHelpers.MetersToKm(TotalDistance);

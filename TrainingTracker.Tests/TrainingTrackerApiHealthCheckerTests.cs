@@ -36,13 +36,15 @@ namespace TrainingTracker.Tests
         public async Task CreateActivity_ShouldReturnOkAndActivity()
         {
             //Arrange
+            var typeOfActivity = "Running";
             var requestUri = "/api/activities";
             ActivitesCreateDto activity = new ActivitesCreateDto
             {
                 Name = "Night run",
                 Distance = 5,
                 ActivityDate = DateTime.Now,
-                Type = "Running"
+                SportType = Enum.Parse<SportType>(typeOfActivity),
+                //Type = "Running"
             };
 
             //Act
@@ -57,10 +59,10 @@ namespace TrainingTracker.Tests
         }
 
         [Theory]
-        [InlineData("Running")]
-        [InlineData("Cycling")]
-        [InlineData("Walking")]
-        public async Task CreateValidActivity_ShouldReturnOkAndActivity(string typeOfActivity)
+        [InlineData(SportType.Running)]
+        [InlineData(SportType.Cycling)]
+        [InlineData(SportType.Walking)]
+        public async Task CreateValidActivity_ShouldReturnOkAndActivity(SportType typeOfActivity)
         {
             //Arrange
             var requestUri = "/api/activities";
@@ -69,7 +71,8 @@ namespace TrainingTracker.Tests
                 Name = "Run",
                 Distance = 5,
                 ActivityDate = DateTime.Now,
-                Type = typeOfActivity
+                //Type = "typeOfActivity",
+                SportType = typeOfActivity
             };
 
 
@@ -84,30 +87,31 @@ namespace TrainingTracker.Tests
         }
 
         [Theory]
-        [InlineData("Swimming")]
-        [InlineData("Skiing")]
-        [InlineData("Other acitivity")]
-        public async Task CreateInvalidActivity_ShouldReturnBadRequest(string typeOfActivity)
+        [InlineData(SportType.Running)]
+        [InlineData(SportType.Walking)]
+        [InlineData(SportType.Cycling)]
+        public async Task UploadActivity_ShouldReturnOk(SportType typeOfActivity)
         {
             //Arrange
-            var requestUri = "/api/activities";
-            ActivitesCreateDto activity = new()
+            var requestUri = "/api/activities/Upload";
+            SessionInfo activity = new()
             {
-                Name = "Name",
-                Distance = 5,
-                ActivityDate = DateTime.Now,
-                Type = typeOfActivity
+                ActivityName = "Name",
+                TotalDistance = 5,
+                StartTime = new(),
+                Sport = (int)typeOfActivity,
+                TotalTimerTime = 5,
+                TotalCalories = 100,
             };
 
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var createdActivity = response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var createdActivity = await response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
 
             //Assert
-            //Assert.True(createdActivity.Id == null);
-            Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }
