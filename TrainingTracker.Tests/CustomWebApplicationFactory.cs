@@ -14,10 +14,6 @@ namespace TrainingTracker.Tests
     public class CustomWebApplicationFactory<TProgram>
         : WebApplicationFactory<TProgram> where TProgram : class
     {
-        private const string TestConnectionString =
-            //"Server=localhost\\SQLEXPRESS;Database=TrainingTrackerApiDb2Test;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true";
-            "Server=localhost,1433;Database=TrainingTrackerApiDb2Test;\r\nUser Id=SA;Password=Your_password123;TrustServerCertificate=True";
-
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Testing");
@@ -35,7 +31,7 @@ namespace TrainingTracker.Tests
 
             builder.ConfigureServices(services =>
             {
-                services.AddSingleton<SqliteConnection>(_ =>
+                services.AddSingleton(_ =>
                 {
                     var conn = new SqliteConnection("DataSource=:memory:");
                     conn.Open();

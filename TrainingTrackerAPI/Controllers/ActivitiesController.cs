@@ -88,7 +88,7 @@ namespace TrainingTrackerAPI.Controllers
             activityToEdit.SportType = editDto.SportType;
 
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(activityToEdit);
         }
 
         
