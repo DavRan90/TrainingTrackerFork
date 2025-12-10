@@ -9,7 +9,7 @@ using TrainingTracker.ViewModel;
 using TrainingTrackerAPI.Models;
 using SportType = TrainingTracker.ViewModel.SportType;
 
-namespace TrainingTracker.Tests
+namespace TrainingTracker.Tests.TrainingTrackerTests
 {
     public class CalculateCaloriesTests
     {
