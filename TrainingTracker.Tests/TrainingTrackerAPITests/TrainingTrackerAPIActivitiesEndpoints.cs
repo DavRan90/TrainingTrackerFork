@@ -30,10 +30,12 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
             var created = await response.Content.ReadFromJsonAsync<ActivitiesDTO>();
+            
 
             //Assert
             response.EnsureSuccessStatusCode();
             Assert.Equal(created?.Name, activity.Name);
+            Assert.True(created.Id != null);
         }
 
         [Fact]

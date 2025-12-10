@@ -13,20 +13,12 @@ namespace TrainingTracker.Tests.TrainingTrackerTests
 {
     public class CalculateCaloriesTests
     {
-        //private readonly CalorieService _calorieService;
-        //public CalculateCaloriesTests(CalorieService calorieService)
-        //{
-        //    _calorieService = calorieService;
-        //}
         [Theory]
         [InlineData(70, 3600, SportType.Running, 560)]
         [InlineData(80, 1800, SportType.Cycling, 400)]
         [InlineData(60, 2700, SportType.Walking, 157.8)]
         public void CalculateCalories_ValidActivity_ReturnsExpectedCalories(double weight, double duration, SportType activity, double expected)
         {
-
-
-
             // Arrange
             var calorieService = new CalorieService();
        

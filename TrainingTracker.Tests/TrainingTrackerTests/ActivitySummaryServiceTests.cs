@@ -52,6 +52,7 @@ namespace TrainingTracker.Tests.TrainingTrackerTests
             Assert.Equal(calories, result.TotalCaloriesBurntThisWeek, 0);
 
         }
+
         [Theory]
         [InlineData(10, 15, 25, 50)]
         public void ActivitiesSummary_CalculateTotalDistance_ReturnsDistance(double distance1, double distance2, double distance3, double expected)
