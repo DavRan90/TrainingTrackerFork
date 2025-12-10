@@ -6,7 +6,7 @@ namespace TrainingTrackerAPI.Models
     public class Activity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public DateTime ActivityDate { get; set; }
         public int? AverageHeartRate { get; set; }
         public int? MaxHeartRate { get; set; }
@@ -16,6 +16,8 @@ namespace TrainingTrackerAPI.Models
         public SportType SportType { get; set; }
         public double? CaloriesBurned { get; set; }
         public ApplicationUser? User { get; set; }
+        public int? AvgCadence { get; set; }
+        public double? AvgPower { get; set; }
 
         public string? UserId { get; set; }
     }
