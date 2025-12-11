@@ -1,0 +1,46 @@
+name: SonarQube Analysis
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sonarQube:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout your code
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for proper analysis (history needed)
+
+      # Install .NET SDK (edit version as needed)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # SonarQube Scanner for .NET
+      - name: Install SonarScanner for .NET
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      # Start analysis
+      - name: Begin SonarQube Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # stored in repo secrets
+        run: |
+          dotnet-sonarscanner begin \
+            /k:"YourProjectKey" \
+            /d:sonar.host.url="http://your-sonarqube-server:9000" \
+            /d:sonar.login="$SONAR_TOKEN"
+
+      # Build the solution
+      - name: Build Solution
+        run: dotnet build YourSolution.sln
+
+      # End analysis
+      - name: End SonarQube Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet-sonarscanner end \
+            /d:sonar.login="$SONAR_TOKEN"
