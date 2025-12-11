@@ -35,10 +35,3 @@ jobs:
           FAILED=${FAILED:-0}   # default to 0 if empty
           echo "passed=$PASSED" >> $GITHUB_OUTPUT
           echo "failed=$FAILED" >> $GITHUB_OUTPUT
-          
-        env:
-          USE_SQLITE: "true"
-          curl -X POST \
-               -H "Content-Type: application/json" \
-               -d "{\"content\": \"🧪 Tester körda!\n✅ Passed: ${{ steps.test.outputs.passed }}\n❌ Failed: ${{ steps.test.outputs.failed }}\"}" \
-               "$DISCORD_WEBHOOK_URL"
